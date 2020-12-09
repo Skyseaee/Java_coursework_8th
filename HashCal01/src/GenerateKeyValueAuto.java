@@ -46,6 +46,38 @@ public class GenerateKeyValueAuto {
         }
     }
 
+    public static void generateValue(File file, String filecontent) throws IOException {
+        // 创建文件
+        File srcfile = file;
+
+        // 创建流节点流
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(filecontent.getBytes()));
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
+        byte[] buffer = new byte[1024];
+        int len = -1;
+        while((len = bufferedInputStream.read(buffer))!=-1)
+        {
+            bufferedOutputStream.write(buffer,0,len);
+        }
+        if(bufferedOutputStream!=null)
+        {
+            try {
+                bufferedOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(bufferedInputStream!=null)
+        {
+            try {
+                bufferedInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * 为之前的文件夹创建新的文件，名字为文件夹内容的哈希值，内容为子文件的内容以及子文件的名称
      * @param inputStream 需要进行保存的内容
