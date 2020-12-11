@@ -78,4 +78,24 @@
 方法
 
 - 查询
+---
 
+## 第二次作业 
+   -  实现commit功能
+  
+**实现思路**
+   - 01 commit对象（key-value的形式存储）
+     - key：commit对象的哈希值
+     - value：
+       - tree的key（根目录的哈希值）
+       - parent：上一次提交的commit对象的key
+       - author：
+       - committer：
+       - commit备注/注释
+       - commit时间戳
+   - 02 HEAD指针
+     - 建立一个文件 里面存储最新的commit的key 
+   - 03 commit过程
+     - （新生成的commit，需要将提交的文件与之前的对比，只保存不同的文件）
+     - 每次生成的commit，将其根目录的tree与已有的最新commit的tree的key进行比较，发现不相同时（即文件发生了变动）添加一个commit对象，更新HEAD文件中存储的内容
+ 
