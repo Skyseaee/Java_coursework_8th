@@ -113,3 +113,4 @@
    - 方法
       - get/set方法
       - 创建commit对应的文件
+      - tostring方法（返回描述commit对象的字符串）
