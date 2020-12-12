@@ -86,16 +86,30 @@
 **实现思路**
    - 01 commit对象（key-value的形式存储）
      - key：commit对象的哈希值
-     - value：
-       - tree的key（根目录的哈希值）
-       - parent：上一次提交的commit对象的key
-       - author：
-       - committer：
-       - commit备注/注释
-       - commit时间戳
+     - value： 1.提交项目的根目录**tree的key** 2.前驱**commit对象的key**（从head文件中取得）3.代码author 4.代码committer 5.commit备注 6.commit时间戳
+     - 创建一份文件，文件的内容是以上的value，根据这些value生成commit的key，作为文件的文件名
    - 02 HEAD指针
-     - 建立一个文件 里面存储最新的commit的key 
+     - 建立一个文件 里面存储最新的commit的key
    - 03 commit过程
      - （新生成的commit，需要将提交的文件与之前的对比，只保存不同的文件）
      - 每次生成的commit，将其根目录的tree与已有的最新commit的tree的key进行比较，发现不相同时（即文件发生了变动）添加一个commit对象，更新HEAD文件中存储的内容
  
+ **创建一个commit类**
+ 
+   - 属性 privat
+      - tree的key
+      - parent的key
+      - author
+      - committer
+      - note（注释）
+      - timestamp（时间戳）
+      - commit的key
+      - 要生成的commit文件的文件内容stringBuilder
+  
+   - 构造
+      - 创建默认commit的无参构造方法
+      - 创建指定tree 和 parent 的构造方法
+
+   - 方法
+      - get/set方法
+      - 创建commit对应的文件
