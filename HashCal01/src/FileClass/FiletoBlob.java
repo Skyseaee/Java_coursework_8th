@@ -2,9 +2,6 @@ package FileClass;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
 
 public class FiletoBlob implements GitUtils{
     private File file;
@@ -60,7 +57,6 @@ public class FiletoBlob implements GitUtils{
         this.content.append(hashCode);
         this.content.append(" ");
         this.content.append(fileName);
-        this.content.append(" ");
         this.content.append('\n');
     }
 

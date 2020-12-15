@@ -82,7 +82,7 @@
 
 ## 第二次作业 deadline -- 12/16
    -  实现commit功能
-  
+
 **实现思路**
    - 01 commit对象（key-value的形式存储）
      - key：commit对象的哈希值
@@ -93,9 +93,9 @@
    - 03 commit过程
      - （新生成的commit，需要将提交的文件与之前的对比，只保存不同的文件）
      - 每次生成的commit，将其根目录的tree与已有的最新commit的tree的key进行比较，发现不相同时（即文件发生了变动）添加一个commit对象，更新HEAD文件中存储的内容
- 
+
  **创建一个commit类**
- 
+
    - 属性 privat
       - tree的key
       - parent的key
@@ -114,3 +114,25 @@
       - get/set方法
       - 创建commit对应的文件
       - tostring方法（返回描述commit对象的字符串）
+
+
+
+### 单元测试 Junit
+
+
+
+**第一个检测对应的哈希值**
+
+使用Junit的断言方法来进行测试
+
+- 在@Before中实例化DFSFolder对象，创建文件夹以及一些子文件和子文件夹等
+- 在@Test中使用断言的方式验证查找的功能，使用`assertEquals(expected, actual)` （还没研究完不知道可行性如何）查看
+- 在@After中释放资源
+
+
+
+**第二个Commit功能的单元测试**
+
+- 编写一些修改文件的方法
+
+- 在@Test中提交调用修改文件的方法进行几次不同的commit，通过断言判断结果是否正确
