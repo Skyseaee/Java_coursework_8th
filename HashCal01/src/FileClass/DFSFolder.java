@@ -1,14 +1,23 @@
+package FileClass;
+
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
-import FileClass.*;
 
-public class DFSTest implements GitUtils{
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("please input the absolute path");
-        String absolutePath = scanner.nextLine();
-        createFileFold(absolutePath);
+/**
+ * 深度遍历文件夹生成对应新的git仓库
+ */
+public class DFSFolder implements GitUtils{
+    private String path;
+    private String newPath;
+    /**
+     * 构造函数,根据私有属性path来调用其他方法进行后续操作
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    public DFSFolder(String path, String newPath) throws IOException, NoSuchAlgorithmException {
+        this.path = path;
+        this.newPath = newPath;
+        createFileFold(path, newPath);
     }
 
     /**
@@ -17,13 +26,12 @@ public class DFSTest implements GitUtils{
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
-    public static void createFileFold(String pathname) throws IOException, NoSuchAlgorithmException {
-        String newPathName = pathname + "hashFolder";
-        File file = new File(newPathName);
+    public static void createFileFold(String pathname, String newPath) throws IOException, NoSuchAlgorithmException {
+        File file = new File(newPath);
         if(!file.exists()) {
             file.mkdir();
         }
-        dfs(pathname, newPathName);
+        dfs(pathname, newPath);
     }
 
     /**

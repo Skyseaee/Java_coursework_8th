@@ -1,5 +1,6 @@
 package FileClass;
 
+import javax.xml.stream.FactoryConfigurationError;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -103,4 +104,57 @@ public interface GitUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 判断查找到的文件内容是否与原文件相同，即将原文件内容取出重新计算哈希值与新文件的文件名比较看是否相同
+     * @param newfileName1 索引文件的文件名
+     * @param oldfileName2 旧文件的绝对路径
+     * @return
+     */
+    public static boolean isFileSame(String newfileName1, String oldfileName2) {
+        InputStream is = null;
+        String f1hash = "";
+        boolean res = false;
+        File fl = new File(oldfileName2);
+        try {
+            is = new FileInputStream(fl);
+            f1hash = HashCompute(is);
+            if(f1hash.equals(newfileName1)) {res = true;}
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(is!=null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 查找
+     * @param key 对应的哈希值
+     * @param pathname 文件夹路径
+     * @return File or null if not find
+     * @throws IOException
+     */
+    public static File FindFile(String key, String pathname) throws IOException {
+        File file = new File(pathname);
+        File[] fs = file.listFiles();
+        for(File fi:fs){
+            if(fi.getName().equals(key)) {
+                return fi;
+            }
+        }
+        System.out.println("File not found!");
+        return null;
+    }
+
 }

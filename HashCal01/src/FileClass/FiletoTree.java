@@ -71,7 +71,6 @@ public class FiletoTree implements GitUtils{
     public void setFolderContent(String lastContent) {
         this.folderContent = new StringBuilder();
         this.folderContent.append(fileType);
-        this.folderContent.append(" ");
         this.folderContent.append(lastContent);
         this.folderContent.append(" ");
         this.folderContent.append(folderName);
