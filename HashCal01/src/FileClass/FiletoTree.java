@@ -4,22 +4,22 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 
 public class FiletoTree implements GitUtils{
     private File file;
     private String hashCode;
     private String folderName;
-    private final String fileType = "Tree ";
     private List<File> childFile;
-    private StringBuilder folderContent;
+    private String folderContent;
 
-    public FiletoTree(File file, String lastContent) {
+    public FiletoTree(File file,String newPath) throws IOException, NoSuchAlgorithmException {
         this.file = file;
         folderName = file.getName();
-        setFolderContent(lastContent);
+        setFolderContent();
         setHashCode();
+        newPath = newPath + "\\" + hashCode + ".txt";
+        GitUtils.GenerateValue(new File(newPath), folderContent);
     }
 
     public FiletoTree(String filePath) {
@@ -40,7 +40,7 @@ public class FiletoTree implements GitUtils{
 
     public void setHashCode() {
         try {
-            this.hashCode = GitUtils.HashCompute(new ByteArrayInputStream(folderContent.toString().getBytes()));
+            this.hashCode = GitUtils.HashCompute(new ByteArrayInputStream(folderContent.getBytes()));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -52,10 +52,6 @@ public class FiletoTree implements GitUtils{
         return folderName;
     }
 
-    public String getFileType() {
-        return fileType;
-    }
-
     public List<File> getChildFile() {
         return childFile;
     }
@@ -64,17 +60,12 @@ public class FiletoTree implements GitUtils{
         this.childFile.add(childFile);
     }
 
-    public StringBuilder getFolderContent() {
+    public String getFolderContent() {
         return folderContent;
     }
 
-    public void setFolderContent(String lastContent) {
-        this.folderContent = new StringBuilder();
-        this.folderContent.append(fileType);
-        this.folderContent.append(lastContent);
-        this.folderContent.append(" ");
-        this.folderContent.append(folderName);
-        this.folderContent.append('\n');
+    public void setFolderContent() throws IOException, NoSuchAlgorithmException {
+        this.folderContent = GitUtils.FolderHash(file.getAbsolutePath()).toString();
     }
 
 }

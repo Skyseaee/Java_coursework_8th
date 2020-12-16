@@ -36,7 +36,6 @@ public class HashGenerateTest implements GitUtils {
             if((line = br.readLine())!=null) {
                 String[] lines = line.split(" ");
                 if(lines[0].equals("Tree") || lines[0].equals("Blob")) {
-                    System.out.println("A folder is here.");
                     folderFile = fi;
                 }
             }
@@ -50,7 +49,7 @@ public class HashGenerateTest implements GitUtils {
                     String[] lines = line.split(" ");
                     tempfilehash = lines[1];
                     if(lines[0].equals("Tree")) {
-                        String tempHash = UnitTestUtils.FolderHash(files[fileindex++].getAbsolutePath());
+                        String tempHash = GitUtils.HashCompute(new ByteArrayInputStream(GitUtils.FolderHash(files[fileindex++].getAbsolutePath()).toString().getBytes()));
                         if(!tempfilehash.equals(tempHash)) {
                             res = false;
                         }

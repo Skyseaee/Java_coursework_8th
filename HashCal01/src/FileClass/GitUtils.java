@@ -5,6 +5,8 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Dictionary;
+import java.util.HashMap;
 
 public interface GitUtils {
     /**
@@ -157,4 +159,30 @@ public interface GitUtils {
         return null;
     }
 
+    public static StringBuilder FolderHash(String filePath) throws IOException, NoSuchAlgorithmException {
+        StringBuilder tempcontent = new StringBuilder();
+        String hashcode = "";
+        File dir = new File(filePath);
+        File[] fs = dir.listFiles();
+
+        for(File item: fs) {
+            if(item.isFile()) {
+                tempcontent.append("Blob");
+                tempcontent.append(" ");
+                tempcontent.append(HashCompute(new FileInputStream(item)));
+                tempcontent.append(" ");
+                tempcontent.append(item.getName());
+                tempcontent.append('\n');
+            }
+            if(item.isDirectory()) {
+                tempcontent.append("Tree");
+                tempcontent.append(" ");
+                tempcontent.append(HashCompute(new ByteArrayInputStream(FolderHash(item.getAbsolutePath()).toString().getBytes())));
+                tempcontent.append(" ");
+                tempcontent.append(item.getName());
+                tempcontent.append('\n');
+            }
+        }
+        return tempcontent;
+    }
 }
