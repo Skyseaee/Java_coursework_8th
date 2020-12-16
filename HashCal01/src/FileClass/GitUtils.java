@@ -1,12 +1,9 @@
 package FileClass;
 
-import javax.xml.stream.FactoryConfigurationError;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Dictionary;
-import java.util.HashMap;
 
 public interface GitUtils {
     /**
@@ -111,7 +108,7 @@ public interface GitUtils {
      * 判断查找到的文件内容是否与原文件相同，即将原文件内容取出重新计算哈希值与新文件的文件名比较看是否相同
      * @param newfileName1 索引文件的文件名
      * @param oldfileName2 旧文件的绝对路径
-     * @return
+     * @return bool
      */
     public static boolean isFileSame(String newfileName1, String oldfileName2) {
         InputStream is = null;
@@ -159,6 +156,13 @@ public interface GitUtils {
         return null;
     }
 
+    /**
+     * 返回文件夹的哈希值
+     * @param filePath 文件夹的路径
+     * @return 返回文件夹对应的文件需要保存的内容
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
     public static StringBuilder FolderHash(String filePath) throws IOException, NoSuchAlgorithmException {
         StringBuilder tempcontent = new StringBuilder();
         String hashcode = "";
@@ -185,4 +189,5 @@ public interface GitUtils {
         }
         return tempcontent;
     }
+
 }

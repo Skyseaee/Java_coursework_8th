@@ -1,12 +1,9 @@
 package UnitTest;
 
-import FileClass.FiletoBlob;
-import FileClass.FiletoTree;
 import FileClass.GitUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
