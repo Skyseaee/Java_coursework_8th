@@ -4,6 +4,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 public interface GitUtils {
     /**
@@ -78,8 +79,7 @@ public interface GitUtils {
     }
 
     public static void GenerateValue(File file, String filecontent) throws IOException {
-        // 创建文件
-        File srcfile = file;
+
 
         // 创建流节点流
         BufferedInputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(filecontent.getBytes()));
@@ -165,7 +165,6 @@ public interface GitUtils {
      */
     public static StringBuilder FolderHash(String filePath) throws IOException, NoSuchAlgorithmException {
         StringBuilder tempcontent = new StringBuilder();
-        String hashcode = "";
         File dir = new File(filePath);
         File[] fs = dir.listFiles();
 
@@ -190,4 +189,36 @@ public interface GitUtils {
         return tempcontent;
     }
 
+    public static String readFirstLine(File file) throws Exception{
+        if(!file.exists()){
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String ans = input.nextLine();
+            input.close();
+            return ans;
+        }
+    }
+
+    public static void writeLine(File file,String content) throws IOException{
+        File tmp = File.createTempFile("tmp", null);
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        FileOutputStream tmpOut = new FileOutputStream(tmp);
+        FileInputStream tmpIn = new FileInputStream(tmp);
+        raf.seek(0);
+        byte[] buf = new byte[64];
+        int hasRead = 0;
+        while((hasRead = raf.read(buf)) > 0){
+            tmpOut.write(buf,0,hasRead);
+        }
+        raf.seek(0);
+        raf.write(content.getBytes());
+        while((hasRead = tmpIn.read(buf)) > 0){
+            raf.write(buf,0,hasRead);
+        }
+        raf.close();
+        tmpIn.close();
+        tmpOut.close();
+    }
 }

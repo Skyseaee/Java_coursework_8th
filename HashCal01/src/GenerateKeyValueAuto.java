@@ -57,7 +57,7 @@ public class GenerateKeyValueAuto {
 
         // 创建流节点流
         BufferedInputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(filecontent.getBytes()));
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(srcfile));
         byte[] buffer = new byte[1024];
         int len = -1;
         while((len = bufferedInputStream.read(buffer))!=-1)
