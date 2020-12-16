@@ -1,12 +1,11 @@
 package FileClass;
 
-import javax.xml.stream.FactoryConfigurationError;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.Scanner;
 
 public interface GitUtils {
     /**
@@ -81,8 +80,7 @@ public interface GitUtils {
     }
 
     public static void GenerateValue(File file, String filecontent) throws IOException {
-        // 创建文件
-        File srcfile = file;
+
 
         // 创建流节点流
         BufferedInputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(filecontent.getBytes()));
@@ -161,7 +159,6 @@ public interface GitUtils {
 
     public static StringBuilder FolderHash(String filePath) throws IOException, NoSuchAlgorithmException {
         StringBuilder tempcontent = new StringBuilder();
-        String hashcode = "";
         File dir = new File(filePath);
         File[] fs = dir.listFiles();
 
@@ -184,5 +181,16 @@ public interface GitUtils {
             }
         }
         return tempcontent;
+    }
+    public static String readFirstLine(File file) throws Exception{
+        if(!file.exists()){
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String ans = input.nextLine();
+            input.close();
+            return ans;
+        }
     }
 }
