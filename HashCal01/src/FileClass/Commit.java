@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.io.File;
-public class Commit {
+public class Commit{
     private String hashCode;
     private String author;
     private String committer;
@@ -24,6 +24,8 @@ public class Commit {
             setHashCode();
             newPath = newPath + '\\' + hashCode + ".txt";
             GitUtils.GenerateValue(new File(newPath), this.toString());
+            newPath = "head.txt";
+            GitUtils.GenerateValue(new File(newPath), hashCode);
         }
         else{
             this.lastKey = getLastKey(head);
@@ -36,6 +38,7 @@ public class Commit {
                 setHashCode();
                 newPath = newPath + '\\' + hashCode + ".txt";
                 GitUtils.GenerateValue(new File(newPath), this.toString());
+                GitUtils.writeLine(head, hashCode);
             }
         }
     }

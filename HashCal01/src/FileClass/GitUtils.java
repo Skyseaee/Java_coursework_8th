@@ -193,4 +193,24 @@ public interface GitUtils {
             return ans;
         }
     }
+    public static void writeLine(File file,String content) throws IOException{
+        File tmp = File.createTempFile("tmp", null);
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        FileOutputStream tmpOut = new FileOutputStream(tmp);
+        FileInputStream tmpIn = new FileInputStream(tmp);
+        raf.seek(0);
+        byte[] buf = new byte[64];
+        int hasRead = 0;
+        while((hasRead = raf.read(buf)) > 0){
+            tmpOut.write(buf,0,hasRead);
+        }
+        raf.seek(0);
+        raf.write(content.getBytes());
+        while((hasRead = tmpIn.read(buf)) > 0){
+            raf.write(buf,0,hasRead);
+        }
+        raf.close();
+        tmpIn.close();
+        tmpOut.close();
+    }
 }
