@@ -13,14 +13,14 @@ import java.security.NoSuchAlgorithmException;
 public class UnitTestUtils implements GitUtils{
     public static File DFSFolder(File file, String hashcode) throws IOException, NoSuchAlgorithmException {
         hashcode = hashcode.split("\\.")[0];
-        if(hashcode.equals(FolderHash(file.getAbsolutePath()))) {
+        if(hashcode.equals(GitUtils.HashCompute(new ByteArrayInputStream(GitUtils.FolderHash(file.getAbsolutePath()).toString().getBytes())))) {
             return file;
         }
         File res = null;
         File[] fs = file.listFiles();
         for(File fi:fs) {
             if(fi.isDirectory()) {
-                if(hashcode.equals(FolderHash(fi.getAbsolutePath()))) {
+                if(hashcode.equals(GitUtils.HashCompute(new ByteArrayInputStream(GitUtils.FolderHash(fi.getAbsolutePath()).toString().getBytes())))) {
                     return fi;
                 }
                 else {
@@ -32,26 +32,6 @@ public class UnitTestUtils implements GitUtils{
             }
         }
         return res;
-    }
-
-    public static String FolderHash(String filePath) throws IOException, NoSuchAlgorithmException {
-        StringBuilder tempcontent = new StringBuilder();
-        String hashcode = "";
-        File dir = new File(filePath);
-        File[] fs = dir.listFiles();
-
-        for(File item: fs) {
-            if(item.isFile()) {
-                FiletoBlob fb = new FiletoBlob(item);
-                tempcontent.append(fb.getContent());
-            }
-            if(item.isDirectory()) {
-                FiletoTree ft = new FiletoTree(item, FolderHash(filePath + File.separator + item.getName()));
-                tempcontent.append(ft.getFolderContent());
-            }
-        }
-        hashcode = GitUtils.HashCompute(new ByteArrayInputStream(tempcontent.toString().getBytes()));
-        return hashcode;
     }
 
     public static File FindFileinthenewFolder(File[] filelist,String hashcode) {

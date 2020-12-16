@@ -51,19 +51,16 @@ public class DFSFolder implements GitUtils{
         for(File item: fs) {
             if(item.isFile()) {
                 // 如果是文件，则对文件内容进行哈希并将哈希值作为新文件的文件名，原文件内容依然不变的方式创建新文件
-                FiletoBlob fb = new FiletoBlob(item);
-                tempcontent.append(fb.getContent());
-                fb.GenerateFile(newPathname);
+                new FiletoBlob(item, newPathname);
             }
             if(item.isDirectory()) {
-                FiletoTree ft = new FiletoTree(item, dfs(path + File.separator + item.getName(), newPathname));
+                FiletoTree ft = new FiletoTree(item, newPathname);
+                dfs(path + File.separator + item.getName(), newPathname);
                 tempcontent.append(ft.getFolderContent());
             }
         }
-        hashcode = GitUtils.HashCompute(new ByteArrayInputStream(tempcontent.toString().getBytes()));
-        tempname = newPathname + "\\" + hashcode + ".txt";
-        File newFile = new File(tempname);
-        GitUtils.GenerateValue(newFile, tempcontent.toString());
+
+        hashcode =  GitUtils.HashCompute(new ByteArrayInputStream(tempcontent.toString().getBytes()));
         return hashcode;
     }
 
