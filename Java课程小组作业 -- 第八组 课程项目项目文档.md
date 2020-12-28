@@ -89,7 +89,7 @@
      - value： 1.提交项目的根目录**tree的key** 2.前驱**commit对象的key**（从head文件中取得）3.代码author 4.代码committer 5.commit备注 6.commit时间戳
      - 创建一份文件，文件的内容是以上的value，根据这些value生成commit的key，作为文件的文件名
    - 02 HEAD指针
-     - 建立一个文件 里面存储最新的commit的key
+     - 建立一个文件 里面存储最新的commit的key及当前分支的信息
    - 03 commit过程
      - （新生成的commit，需要将提交的文件与之前的对比，只保存不同的文件）
      - 每次生成的commit，将其根目录的tree与已有的最新commit的tree的key进行比较，发现不相同时（即文件发生了变动）添加一个commit对象，更新HEAD文件中存储的内容
@@ -136,3 +136,57 @@
 - 编写一些修改文件的方法
 
 - 在@Test中提交调用修改文件的方法进行几次不同的commit，通过断言判断结果是否正确
+
+
+
+## 第三次作业 deadline -- 12/30
+  - 分支
+  - 回滚
+  - 命令行交互
+   
+ **实现思路**
+  + 01 分支管理
+    - 分支信息的保存
+      - 有哪些分支
+      - 每个分支的最新commit id
+      - 当前处于的分支
+    - 实现过程：
+      - 创建一个文件夹，文件夹命名为branch，文件夹中的每个文件是各个分支的信息（初始状态下，branch文件夹中有一个名为main的空文件）
+      - 每新建一个分支，在branch文件夹中增加一个以该分支名命名的文件，每次commit将commit的key写入对应的分支文件中
+      - 每次commit将其对应的分支名写入head文件中
+  + 02 分支切换和回滚
+     - 回滚
+        - 从所有的commmit记录中找到需要回滚到哪次，即对应的commit key（git log）
+        - 把commit对应的根目录Tree对象恢复成一个文件夹
+          - 根据commit key查询得到commit的value
+          - 从commit value中解析得到根目录tree的key
+          - 恢复(path)：
+            - 根据tree的key查询得到value
+            - 解析value中的每一条记录，即这个tree对象所代表的文件夹内的子文件与子文件夹名称以及对应的blob/tree key
+            - 对于blob，在path中创建文件，命名为相应的文件名，写入blob的value
+            - 对于tree，在path中创建文件夹，命名为相应的文件夹名，递归调用恢复(path+文件夹名)
+          - 更新head指针
+            - 将head文件中的commit的key改为回滚到的commit的key
+     - 分支切换
+        - 找到要切换到的分支对应的文件，读出其中最新的commit的key
+        - 把commit对应的根目录tree对象恢复成文件夹（同回滚）
+        - 更新head指针
+          - 将head文件中的分支记录改为切换为的分支
+  + 03 命令行交互
+      - 要实现的命令
+        - 提交
+          - git commit -m“   ” 提交
+        - 创建并切换分支
+          - git branch 查看已有分支
+            - 遍历读取branch文件中所有文件的文件名
+          - git branch branchname 创建新分支
+            - 在branch文件夹中新建一个名为branchname的空文件
+          - git checkout branchname 切换到branchname分支
+        - 回滚到历史版本
+          - git log 查看所有的commit id
+            - 创建一个文件，每次提交将生成的commit的key写入文件中，执行git log操作，依次读出该文件中记录的commit的key以及找到对应的commit文件读出其value
+          - git reset commit id -hard 回滚到对应的commit状态
+      - 实现过程
+        - Scanner接收用户指令
+        - 通过main函数命令行参数String[] args接收用户指令
+
