@@ -96,7 +96,7 @@
 
  **创建一个commit类**
 
-   - 属性 privat
+   - 属性 private
       - tree的key
       - parent的key
       - author
