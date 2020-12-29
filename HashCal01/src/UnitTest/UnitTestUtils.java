@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-public class UnitTestUtils implements GitUtils{
+public class UnitTestUtils{
     public static File DFSFolder(File file, String hashcode) throws IOException, NoSuchAlgorithmException {
         hashcode = hashcode.split("\\.")[0];
         if(hashcode.equals(GitUtils.HashCompute(new ByteArrayInputStream(GitUtils.FolderHash(file.getAbsolutePath()).toString().getBytes())))) {
@@ -29,14 +29,5 @@ public class UnitTestUtils implements GitUtils{
             }
         }
         return res;
-    }
-
-    public static File FindFileinthenewFolder(File[] filelist,String hashcode) {
-        String filename = hashcode + ".txt";
-        for(File fi:filelist) {
-            if(fi.getName().equals(filename))
-                return fi;
-        }
-        return null;
     }
 }

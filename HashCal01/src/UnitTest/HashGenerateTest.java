@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
 
-public class HashGenerateTest implements GitUtils {
+public class HashGenerateTest{
 
     private final File folder = new File("E:\\Learning Materials\\Peking\\FirstSemester\\JavaProgramming\\Test");
     private final String filePath = folder.getAbsolutePath();
@@ -71,5 +71,6 @@ public class HashGenerateTest implements GitUtils {
     @After
     public void close() {
         System.out.println("The unit test is over!");
+        // 删除创建的文件夹？
     }
 }

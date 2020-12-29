@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-public interface GitUtils {
+public class GitUtils {
     /**
      * 计算哈希值
      * @param inputStream 需要进行哈希的内容
@@ -78,8 +78,13 @@ public interface GitUtils {
 
     }
 
-    public static void GenerateValue(File file, String filecontent) throws IOException {
-
+    /**
+     * 将文件夹以txt文件的形式进行保存
+     * @param file 要写入的文件
+     * @param filecontent 文件内容
+     * @throws IOException
+     */
+    public static void generateFolderValue(File file, String filecontent) throws IOException {
 
         // 创建流节点流
         BufferedInputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(filecontent.getBytes()));
@@ -101,6 +106,14 @@ public interface GitUtils {
             bufferedInputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            if(bufferedOutputStream!=null) {
+                bufferedOutputStream.close();
+            }
+            if(bufferedInputStream!=null) {
+                bufferedInputStream.close();
+            }
         }
     }
 
@@ -144,11 +157,11 @@ public interface GitUtils {
      * @return File or null if not find
      * @throws IOException
      */
-    public static File FindFile(String key, String pathname) throws IOException {
+    public static File findFile(String key, String pathname) throws IOException {
         File file = new File(pathname);
         File[] fs = file.listFiles();
-        for(File fi:fs){
-            if(fi.getName().equals(key)) {
+        for(File fi:fs) {
+            if((fi.getName().split("\\.")[0]).equals(key)) {
                 return fi;
             }
         }
@@ -189,8 +202,9 @@ public interface GitUtils {
         return tempcontent;
     }
 
-    public static String readFirstLine(File file) throws Exception{
+    public static String readFirstLine(File file) throws FileNotFoundException {
         if(!file.exists()){
+            System.out.println("the file is not exist, can't read the first line.");
             return null;
         }
         else{
@@ -221,4 +235,5 @@ public interface GitUtils {
         tmpIn.close();
         tmpOut.close();
     }
+
 }
