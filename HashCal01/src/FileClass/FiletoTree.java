@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public class FiletoTree implements GitUtils{
+public class FiletoTree{
     private File file;
     private String hashCode;
     private String folderName;
@@ -19,7 +19,7 @@ public class FiletoTree implements GitUtils{
         setFolderContent();
         setHashCode();
         newPath = newPath + "\\" + hashCode + ".txt";
-        GitUtils.GenerateValue(new File(newPath), folderContent);
+        GitUtils.generateFolderValue(new File(newPath), folderContent);
     }
 
     public FiletoTree(String filePath) {

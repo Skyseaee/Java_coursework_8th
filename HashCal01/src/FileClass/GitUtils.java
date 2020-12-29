@@ -1,14 +1,12 @@
 package FileClass;
 
-import javax.xml.stream.FactoryConfigurationError;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.Scanner;
 
-public interface GitUtils {
+public class GitUtils {
     /**
      * 计算哈希值
      * @param inputStream 需要进行哈希的内容
@@ -80,9 +78,13 @@ public interface GitUtils {
 
     }
 
-    public static void GenerateValue(File file, String filecontent) throws IOException {
-        // 创建文件
-        File srcfile = file;
+    /**
+     * 将文件夹以txt文件的形式进行保存
+     * @param file 要写入的文件
+     * @param filecontent 文件内容
+     * @throws IOException
+     */
+    public static void generateFolderValue(File file, String filecontent) throws IOException {
 
         // 创建流节点流
         BufferedInputStream bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(filecontent.getBytes()));
@@ -105,13 +107,21 @@ public interface GitUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        finally {
+            if(bufferedOutputStream!=null) {
+                bufferedOutputStream.close();
+            }
+            if(bufferedInputStream!=null) {
+                bufferedInputStream.close();
+            }
+        }
     }
 
     /**
      * 判断查找到的文件内容是否与原文件相同，即将原文件内容取出重新计算哈希值与新文件的文件名比较看是否相同
      * @param newfileName1 索引文件的文件名
      * @param oldfileName2 旧文件的绝对路径
-     * @return
+     * @return bool
      */
     public static boolean isFileSame(String newfileName1, String oldfileName2) {
         InputStream is = null;
@@ -147,11 +157,11 @@ public interface GitUtils {
      * @return File or null if not find
      * @throws IOException
      */
-    public static File FindFile(String key, String pathname) throws IOException {
+    public static File findFile(String key, String pathname) throws IOException {
         File file = new File(pathname);
         File[] fs = file.listFiles();
-        for(File fi:fs){
-            if(fi.getName().equals(key)) {
+        for(File fi:fs) {
+            if((fi.getName().split("\\.")[0]).equals(key)) {
                 return fi;
             }
         }
@@ -159,9 +169,15 @@ public interface GitUtils {
         return null;
     }
 
+    /**
+     * 返回文件夹的哈希值
+     * @param filePath 文件夹的路径
+     * @return 返回文件夹对应的文件需要保存的内容
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
     public static StringBuilder FolderHash(String filePath) throws IOException, NoSuchAlgorithmException {
         StringBuilder tempcontent = new StringBuilder();
-        String hashcode = "";
         File dir = new File(filePath);
         File[] fs = dir.listFiles();
 
@@ -185,4 +201,39 @@ public interface GitUtils {
         }
         return tempcontent;
     }
+
+    public static String readFirstLine(File file) throws FileNotFoundException {
+        if(!file.exists()){
+            System.out.println("the file is not exist, can't read the first line.");
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String ans = input.nextLine();
+            input.close();
+            return ans;
+        }
+    }
+
+    public static void writeLine(File file,String content) throws IOException{
+        File tmp = File.createTempFile("tmp", null);
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        FileOutputStream tmpOut = new FileOutputStream(tmp);
+        FileInputStream tmpIn = new FileInputStream(tmp);
+        raf.seek(0);
+        byte[] buf = new byte[64];
+        int hasRead = 0;
+        while((hasRead = raf.read(buf)) > 0){
+            tmpOut.write(buf,0,hasRead);
+        }
+        raf.seek(0);
+        raf.write(content.getBytes());
+        while((hasRead = tmpIn.read(buf)) > 0){
+            raf.write(buf,0,hasRead);
+        }
+        raf.close();
+        tmpIn.close();
+        tmpOut.close();
+    }
+
 }

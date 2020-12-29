@@ -3,7 +3,7 @@ package FileClass;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class FiletoBlob implements GitUtils{
+public class FiletoBlob{
     private File file;
     private String hashCode;
     private String fileName;
