@@ -21,8 +21,9 @@ public class CommitUtils {
     /**
      * 把commit对应的根目录Tree对象恢复成一个文件夹
      * @param pathName 生成的文件夹存放的位置
+     * @param hashCode 要创建的文件夹的哈希值
      */
-    public static void genFolder(String pathName) {
+    public static void genFolder(String pathName, String hashCode) {
 
     }
 }
