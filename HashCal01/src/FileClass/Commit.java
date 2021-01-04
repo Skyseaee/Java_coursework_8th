@@ -14,6 +14,7 @@ public class Commit{
     private String timeStamp;
     private String lastKey;
     private String treeKey;
+    private String newPath;
     private final String type = "Commit";
 
     /**
@@ -26,8 +27,9 @@ public class Commit{
      * @param newPath 新生成的文件所在的地址
      * @throws Exception
      */
-    public Commit(File head,String treeKey,String author,String committer,String comment,String newPath) throws Exception {
+    public Commit(File head,String treeKey,String author,String committer,String comment,String newPath, String branchName) throws Exception {
         if(!head.exists()) {
+            this.newPath = newPath;
             this.author = author;
             this.committer = committer;
             this.comment = comment;
@@ -35,23 +37,30 @@ public class Commit{
             this.treeKey = treeKey;
             this.lastKey = null;
             setHashCode();
-            String newPath01 = newPath + "\\" + hashCode + ".txt";
+            File tempFile = new File(newPath+"\\commit");
+            if(!tempFile.exists()) {
+                tempFile.mkdir();
+            }
+            String newPath01 = newPath + "\\commit\\" + hashCode + ".txt";
             GitUtils.generateFolderValue(new File(newPath01), this.toString());
             String newPath02 = newPath + "\\" + "head.txt";
-            GitUtils.generateFolderValue(new File(newPath02), hashCode);
+            GitUtils.generateFolderValue(new File(newPath02), hashCode + " " + branchName);
         }
         else {
-            this.lastKey = getLastKey(head);
-            if(treeKey.equals(lastKey)) {
+            String lastTreeKey = getLastKey(head);
+
+            if(!treeKey.equals(lastTreeKey)) {
+                this.lastKey = GitUtils.readFirstLine(head);
+                this.newPath = newPath;
                 this.author = author;
                 this.committer = committer;
                 this.comment = comment;
                 this.timeStamp = (new Date()).toString();
                 this.treeKey = treeKey;
                 setHashCode();
-                newPath = newPath + '\\' + hashCode + ".txt";
+                newPath = newPath + "\\commit\\" + hashCode + ".txt";
                 GitUtils.generateFolderValue(new File(newPath), this.toString());
-                GitUtils.writeLine(head, hashCode);
+                GitUtils.writeLine(head, hashCode + " " + branchName);
             }
         }
     }
@@ -59,11 +68,9 @@ public class Commit{
     public String getLastKey(File head) {
         try {
             String lastCommitKey = GitUtils.readFirstLine(head);
-            File lastCommitFile = GitUtils.findFile(lastCommitKey, head.getParent());
-//            return lastCommitKey;
+            File lastCommitFile = GitUtils.findFile(lastCommitKey, head.getParent()+"\\commit");
             try{
-                assert lastCommitFile != null;
-                String res = (GitUtils.readFirstLine(lastCommitFile).split(" "))[1];
+                String res = (GitUtils.readFirstLine(lastCommitFile,false));
                 return res;
             }
             catch (FileNotFoundException e) {
@@ -76,9 +83,8 @@ public class Commit{
             return null;
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("IOException exist");
-            return null;
         }
+        return null;
     }
 
     public String getHashCode() {

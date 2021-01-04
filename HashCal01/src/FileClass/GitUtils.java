@@ -6,6 +6,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
+/**
+ * GitUtils中存放的都是一些会被常用到的方法，因此将这些方法直接写为静态方法方便它们
+ * 在不同的类之间被调用，简化开发流程
+ */
 public class GitUtils {
     /**
      * 计算哈希值
@@ -108,12 +112,8 @@ public class GitUtils {
             e.printStackTrace();
         }
         finally {
-            if(bufferedOutputStream!=null) {
-                bufferedOutputStream.close();
-            }
-            if(bufferedInputStream!=null) {
-                bufferedInputStream.close();
-            }
+            bufferedOutputStream.close();
+            bufferedInputStream.close();
         }
     }
 
@@ -132,11 +132,7 @@ public class GitUtils {
             is = new FileInputStream(fl);
             f1hash = HashCompute(is);
             if(f1hash.equals(newfileName1)) {res = true;}
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (NoSuchAlgorithmException | IOException e) {
             e.printStackTrace();
         } finally {
             if(is!=null) {
@@ -202,6 +198,12 @@ public class GitUtils {
         return tempcontent;
     }
 
+    /**
+     * 读取文件第一行，空格前面的数据
+     * @param file 被读取的文件
+     * @return 读取的字符串
+     * @throws FileNotFoundException
+     */
     public static String readFirstLine(File file) throws FileNotFoundException {
         if(!file.exists()){
             System.out.println("the file is not exist, can't read the first line.");
@@ -209,31 +211,61 @@ public class GitUtils {
         }
         else{
             Scanner input = new Scanner(file);
-            String ans = input.nextLine();
+            String ans = input.nextLine().split(" ")[0];
             input.close();
             return ans;
         }
     }
 
+    /**
+     * 读取文件第一行，空格后面的数据
+     * @param file 被读取的文件
+     * @param index 判断读取文件前面还是后面
+     * @return 读取的字符串
+     * @throws FileNotFoundException
+     */
+    public static String readFirstLine(File file,boolean index) throws FileNotFoundException {
+        if(!file.exists()){
+            System.out.println("the file is not exist, can't read the first line.");
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String ans = input.nextLine().split(" ")[1];
+            input.close();
+            return ans;
+        }
+    }
+
+    /**
+     * 重写文件内容
+     * @param file 被重写的文件
+     * @param content 要写入文件的内容
+     * @throws IOException
+     */
     public static void writeLine(File file,String content) throws IOException{
-        File tmp = File.createTempFile("tmp", null);
-        RandomAccessFile raf = new RandomAccessFile(file, "rw");
-        FileOutputStream tmpOut = new FileOutputStream(tmp);
-        FileInputStream tmpIn = new FileInputStream(tmp);
-        raf.seek(0);
-        byte[] buf = new byte[64];
-        int hasRead = 0;
-        while((hasRead = raf.read(buf)) > 0){
-            tmpOut.write(buf,0,hasRead);
-        }
-        raf.seek(0);
-        raf.write(content.getBytes());
-        while((hasRead = tmpIn.read(buf)) > 0){
-            raf.write(buf,0,hasRead);
-        }
-        raf.close();
-        tmpIn.close();
-        tmpOut.close();
+
+        FileOutputStream fileOutputStream = new FileOutputStream(file, false);
+        fileOutputStream.write(content.getBytes());
+        fileOutputStream.close();
+//        File tmp = File.createTempFile("tmp", null);
+//        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+//        FileOutputStream tmpOut = new FileOutputStream(tmp);
+//        FileInputStream tmpIn = new FileInputStream(tmp);
+//        raf.seek(0);
+//        byte[] buf = new byte[64];
+//        int hasRead = 0;
+//        while((hasRead = raf.read(buf)) > 0){
+//            tmpOut.write(buf,0,hasRead);
+//        }
+//        raf.seek(0);
+//        raf.write(content.getBytes());
+//        while((hasRead = tmpIn.read(buf)) > 0){
+//            raf.write(buf,0,hasRead);
+//        }
+//        raf.close();
+//        tmpIn.close();
+//        tmpOut.close();
     }
 
 }
