@@ -7,54 +7,56 @@ import java.io.*;
  * 初始需要创建一个名为main的文件，代表有main分支(整体初始化的时候创建)
  * 保存分支的文件中需要记录的内容有：本分支下最新的commit的哈希值
  */
-public class Branch {
+public class Branch{
     private String commitHash;
-    private final String branchName;
+    private String branchName;
     private String branchPath;
 
-    public Branch(String branchName, String filePath, String commitHash) throws IOException {
+    /**
+     * 第一次初始化文件夹时，产生Branch为main
+     */
+    public Branch(String filePath, String commitHash) throws IOException {
+        this.branchName = "main";
+        File file = new File(filePath+"\\Branch");
+        if(!file.exists())
+            file.mkdir();
+        branchPath = filePath + "\\Branch\\"+branchName+".txt";
+        this.commitHash = commitHash;
+        // 创建文件
+        File tempFile = new File(branchPath);
+        GitUtils.generateFolderValue(tempFile,commitHash);
+    }
+
+    public Branch(String filePath, String commitHash, String branchName) throws IOException {
         this.branchName = branchName;
-        if(!isSameBranch(filePath+"\\Branch")) {
-            branchPath = filePath + "\\Branch\\"+branchName;
-            File branchFile = new File(branchPath);
-            this.commitHash = commitHash;
-            GitUtils.generateFolderValue(branchFile, commitHash);
-        }
-        else {
-            updateBranch(commitHash);
-        }
+        branchPath = filePath + "\\Branch\\"+ branchName +".txt";
+        File branchFile = new File(branchPath);
+        this.commitHash = commitHash;
+        GitUtils.generateFolderValue(branchFile, commitHash);
     }
 
     /**
      * 通过传入的branch文件对应的路径创建Branch对象
-     * @param branchPath 传入文件的路径
-     * @throws FileNotFoundException
+     * @param branchFile 切换的分支对应的文件
+     * @throws FileNotFoundException 未找到该分支对应的文件
      */
-    public Branch(String branchPath) throws FileNotFoundException {
-        File branchFile = new File(branchPath);
+    public Branch(File branchFile) throws FileNotFoundException {
         branchName = branchFile.getName();
         commitHash = GitUtils.readFirstLine(branchFile);
-        this.branchPath = branchPath;
+        branchPath = branchFile.getAbsolutePath();
     }
+
     /**
-     * 更新branch文件中的commit，可用于切换分支
+     * 更新branch文件中的commit
      * @param newCommitHash 新的commit的哈希值
      * @throws IOException
      */
     public void updateBranch(String newCommitHash) throws IOException {
-        File srcFile = new File(branchPath);
-        FileReader in = new FileReader(srcFile);
-        BufferedReader bufIn = new BufferedReader(in);
-        // 内存流，作为临时流
-        CharArrayWriter tempStream = new CharArrayWriter();
-        // 替换
-        String line = bufIn.readLine();
-        line = line.replaceAll(commitHash,newCommitHash);
-        tempStream.write(line);
-        bufIn.close();
-        FileWriter out = new FileWriter(srcFile);
-        tempStream.writeTo(out);
-        out.close();
+        commitHash = newCommitHash;
+        File branchFile = new File(branchPath);
+        FileWriter fileWriter = new FileWriter(branchFile, false);
+        fileWriter.write(commitHash);
+        fileWriter.close();
     }
 
     /**
@@ -62,11 +64,11 @@ public class Branch {
      * @param branchFolder 保存分支文件的文件夹
      * @return 存在重复返回true, 否则为false
      */
-    private boolean isSameBranch(String branchFolder) {
+    public boolean isSameBranch(String branchFolder, String newBranchName) {
         File file = new File(branchFolder);
         File[] files = file.listFiles();
         for(File fi:files) {
-            if(fi.getName().equals(branchName)) {return true;}
+            if(fi.getName().equals(newBranchName)) {return true;}
         }
         return false;
     }
@@ -74,4 +76,8 @@ public class Branch {
     public String getBranchName() {
         return branchName;
     }
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+    public String getCommitHash() { return commitHash;}
 }
