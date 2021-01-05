@@ -110,7 +110,7 @@ public class CommitUtils {
         // 删除文件，回滚
         CommitUtils.deleteFolder(new File(filePath));
         File folder = new File(filePath);
-        folder.isDirectory();
+        boolean res = folder.isDirectory();
         if(!folder.exists()) {
             folder.mkdir();
         }

@@ -173,20 +173,38 @@
         - 更新head指针
           - 将head文件中的分支记录改为切换为的分支
   + 03 命令行交互
-      - 要实现的命令
+       - 要实现的命令
+        - 初始化
+          - git init 创建第一次commit，初始化main分支
+            - 创建配置文件并保存
+            - DFS创建文件夹
+            - 创建commit
+            - 创建head文件
+            - 初始化main分支
+          -  git config --global user.name "Your Name"
+             -  配置用户名
         - 提交
           - git commit -m“   ” 提交
+            - 创建一个commit对象
+            - 更新branch内容
+            - 更新head内容
         - 创建并切换分支
           - git branch 查看已有分支
             - 遍历读取branch文件中所有文件的文件名
           - git branch branchname 创建新分支
             - 在branch文件夹中新建一个名为branchname的空文件
           - git checkout branchname 切换到branchname分支
+            - 判断该分支是否存在
+            - 进行该分支下文件状态的复现
+            - 更新head中branch的内容
         - 回滚到历史版本
           - git log 查看所有的commit id
             - 创建一个文件，每次提交将生成的commit的key写入文件中，执行git log操作，依次读出该文件中记录的commit的key以及找到对应的commit文件读出其value
           - git reset commit id -hard 回滚到对应的commit状态
+            - 找到对应的commit 复现
+            - 更新head
       - 实现过程
         - Scanner接收用户指令
         - 通过main函数命令行参数String[] args接收用户指令
+
 
