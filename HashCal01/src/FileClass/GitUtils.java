@@ -197,7 +197,31 @@ public class GitUtils {
         }
         return tempcontent;
     }
-
+    /**
+     * 读取Commit文件的lastkey,author,comment,timestramp,branch
+     * @param file 被读取的文件
+     * @return 读取的字符串数组
+     * @throws FileNotFoundException
+     */
+    public static String[] readCommit(File file) throws FileNotFoundException {
+        if(!file.exists()){
+            System.out.println("the file is not exist, can't read the first line.");
+            return null;
+        }
+        else{
+            String[] ans = new String[5];
+            Scanner input = new Scanner(file);
+            input.nextLine();
+            ans[0] = input.nextLine().split(" ")[1];
+            ans[1] = input.nextLine().split(" ")[1];
+            input.nextLine();
+            ans[2] = input.nextLine().split(" ")[0];
+            ans[3] = input.nextLine().split(" ")[0];
+            ans[4] = input.nextLine().split(" ")[1];
+            input.close();
+            return ans;
+        }
+    }
     /**
      * 读取文件第一行，空格前面的数据
      * @param file 被读取的文件
@@ -234,6 +258,73 @@ public class GitUtils {
             String ans = input.nextLine().split(" ")[1];
             input.close();
             return ans;
+        }
+    }
+    /**
+     * 读取文件第n行，空格前面的数据，假设文件为空或者有n行以上
+     * @param file 被读取的文件
+     * @return 读取的字符串
+     * @throws FileNotFoundException
+     */
+    public static String readNthLine(File file,int n) throws FileNotFoundException {
+        if(!file.exists()){
+            System.out.println("the file is not exist, can't read the first line.");
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String ans = "";
+            while(--n != 0){
+                ans = input.nextLine();
+            }
+            ans = input.nextLine().split(" ")[0];
+            input.close();
+            return ans;
+        }
+    }
+    /**
+     * 读取文件第n行，空格前面的数据，假设文件为空或者有n行以上
+     * @param file 被读取的文件
+     * @return 读取的字符串
+     * @throws FileNotFoundException
+     */
+    public static String readNthLine(File file,int n,boolean index) throws FileNotFoundException {
+        if(!file.exists()){
+            System.out.println("the file is not exist, can't read the first line.");
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String ans = "";
+            while(--n != 0){
+                ans = input.nextLine();
+            }
+            ans = input.nextLine().split(" ")[1];
+            input.close();
+            return ans;
+        }
+    }
+    /**
+     * 读取文件最后一行，空格后面的数据
+     * @param file 被读取的文件
+     * @return 读取的字符串
+     * @throws FileNotFoundException
+     */
+    public static String readLastLine(File file,boolean index) throws FileNotFoundException {
+        if(!file.exists()){
+            System.out.println("the file is not exist, can't read the last line.");
+            return null;
+        }
+        else{
+            Scanner input = new Scanner(file);
+            String now = input.nextLine();
+            String pre = now;
+            while(now != null){
+                pre = now;
+                now = input.nextLine();
+            }
+            input.close();
+            return pre;
         }
     }
 

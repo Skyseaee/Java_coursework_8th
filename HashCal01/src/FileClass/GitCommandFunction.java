@@ -162,10 +162,32 @@ public class GitCommandFunction {
     /**
      * 查看commit情况(格式化输出)
      */
-    public void logCommand() {
-
+    public void logPrint(String commitHash,String author,String comment,String timestramp,String branch){
+        System.out.printf("commit %s (%s)\nAuthor: %s\nDate: %s\n\n%s\n\n",commitHash,branch,author,timestramp,comment);
     }
-
+    public void logCommand() throws Exception{
+        headFile = new File(newPath+"\\head.txt");
+        lastHash = GitUtils.readFirstLine(headFile);
+        File tempFile = new File(newPath+"\\commit\\"+lastHash+".txt");
+        String[] ans = GitUtils.readCommit(tempFile);
+        String nextHash = ans[0];
+        String author = ans[1];
+        String comment = ans[2];
+        String timestramp = ans[3];
+        String branch = ans[4];
+        logPrint(lastHash, author, comment,timestramp,branch);
+        while(nextHash != null){
+            lastHash = nextHash;
+            tempFile = new File(newPath+"\\commit\\"+lastHash+".txt");
+            ans = GitUtils.readCommit(tempFile);
+            nextHash = ans[0];
+            author = ans[1];
+            comment = ans[2];
+            timestramp = ans[3];
+            branch = ans[4];
+            logPrint(lastHash, author, comment,timestramp,branch);
+        }
+    }
     /**
      * 修改配置文件
      * @param newUserName 新的用户名
