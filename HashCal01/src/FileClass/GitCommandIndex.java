@@ -1,33 +1,34 @@
 package FileClass;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
  * Git命令
  */
 public class GitCommandIndex {
-    private Map<String, String> commandMap = new HashMap<String, String>();
+    private HashSet<String> commandSet = new HashSet<>();
 
     public GitCommandIndex() {
-        commandMap.put("git", "git");
-        commandMap.put("config", "config");
-        commandMap.put("-m", "message");
-        commandMap.put("branch", "branch");
-        commandMap.put("checkout", "checkout");
-        commandMap.put("log", "log");
-        commandMap.put("reset", "reset");
-        commandMap.put("-d", "delete");
-        commandMap.put("--mixed", "--mixed");
-        commandMap.put("--hard", "--hard");
+        commandSet.add("git");
+        commandSet.add("config");
+        commandSet.add("branch");
+        commandSet.add("checkout");
+        commandSet.add("log");
+        commandSet.add("reset");
+        commandSet.add("-d");
+        commandSet.add("-m");
+        commandSet.add("--mixed");
+        commandSet.add("--hard");
     }
 
-    public Map<String, String> getCommandMap() {
-        return commandMap;
+    public HashSet<String> getCommandSet() {
+        return commandSet;
     }
 
-    public void setCommandMap(String key, String value) {
-        this.commandMap.put(key,value);
+    public void setCommandSet(String key) {
+        this.commandSet.add(key);
     }
 
     // Git init -- 创建第一次commit，初始化main分支，

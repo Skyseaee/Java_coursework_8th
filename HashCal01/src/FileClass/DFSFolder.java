@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * 深度遍历文件夹生成对应新的git仓库
  */
-public class DFSFolder{
+public class DFSFolder {
     private String path;
     private String newPath;
     /**
