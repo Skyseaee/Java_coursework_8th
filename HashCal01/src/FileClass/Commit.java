@@ -12,6 +12,7 @@ public class Commit{
     private String lastKey;
     private String treeKey;
     private String newPath;
+    private String branch;
     private final String type = "Commit";
 
     /**
@@ -33,6 +34,7 @@ public class Commit{
             this.timeStamp = (new Date()).toString();
             this.treeKey = treeKey;
             this.lastKey = null;
+            this.branch = branchName;
             setHashCode();
             File tempFile = new File(newPath+"\\commit");
             if(!tempFile.exists()) {
@@ -116,7 +118,7 @@ public class Commit{
     public String getTreeKey() {return treeKey;}
 
     public String toString() {
-        return "Tree " + treeKey + '\n' + "parent " + lastKey + '\n' + "author " + author + '\n' +"committer " + committer + '\n' + comment + '\n' + timeStamp;
+        return "Tree " + treeKey + '\n' + "parent " + lastKey + '\n'+"author " + author + '\n' +"committer " + committer + '\n' + comment + '\n' + timeStamp + '\n' + "branch:" + branch ;
     }
 
 }
