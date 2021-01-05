@@ -53,8 +53,11 @@ public class GitCommand {
                             gitCommand = new GitCommandFunction(userName, filePath);
                             normalPrint("Initialization was successful.");
                         }
-                        else {
+                        else if(userName.length()<1){
                             errPrint("Your username is empty, please use \"git config userName\" to set your userName.");
+                        }
+                        else {
+                            errPrint("Initialization failed.");
                         }
                     }
                     else if(new File(filePath+"-git\\head.txt").exists()){
@@ -165,8 +168,10 @@ public class GitCommand {
             }
             else if(commandList[1].equals("checkout")) {
                 if(commandList.length==3) {
-                    if(gitCommand!=null)
+                    if(gitCommand!=null) {
                         gitCommand.checkoutCommand(commandList[2]);
+                        normalPrint("The current branch is "+commandList[2]+".");
+                    }
                     else
                         errPrint("The repository has not been initialized");
                 }
@@ -177,7 +182,7 @@ public class GitCommand {
             else if(commandList[1].equals("log")) {
                 if(commandList.length==3) {
                     if(gitCommand!=null)
-                        gitCommand.branchCommand();
+                        gitCommand.logCommand();
                     else
                         errPrint("The repository has not been initialized");
                 }
