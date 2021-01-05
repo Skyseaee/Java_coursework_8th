@@ -1,9 +1,7 @@
 package FileClass;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -154,7 +152,7 @@ public class GitCommandFunction {
             linkedList.add(fi.getName().split("\\.")[0]);
         }
         for(String s1:linkedList) {
-            if(s1.equals(currentBranch.getBranchName())) {
+            if(s1.equals(currentBranch.getBranchName().split("\\.")[0])) {
                 System.out.print("* ");
             }
             System.out.println(s1);
