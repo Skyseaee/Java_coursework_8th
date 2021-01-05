@@ -30,7 +30,7 @@ public class StepTest {
         gitTest.checkoutCommand("test01");
 
         // 查看分支
-        gitTest.branchCommand();
+//        gitTest.branchCommand();
 
     }
 }

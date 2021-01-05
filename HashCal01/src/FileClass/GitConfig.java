@@ -2,7 +2,6 @@ package FileClass;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -25,7 +24,8 @@ public class GitConfig {
         this.userName = userName;
         configPath = newPath;
         File configFile = new File(configPath+"\\config.txt");
-        GitUtils.generateFolderValue(configFile, toString());
+        if(!configFile.exists())
+            GitUtils.generateFolderValue(configFile, toString());
     }
 
     public GitConfig(String configPath) throws FileNotFoundException {

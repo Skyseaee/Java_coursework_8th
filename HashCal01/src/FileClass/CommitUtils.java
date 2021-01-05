@@ -1,5 +1,7 @@
 package FileClass;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.io.*;
 
 /**
@@ -108,6 +110,7 @@ public class CommitUtils {
         // 删除文件，回滚
         CommitUtils.deleteFolder(new File(filePath));
         File folder = new File(filePath);
+        folder.isDirectory();
         if(!folder.exists()) {
             folder.mkdir();
         }

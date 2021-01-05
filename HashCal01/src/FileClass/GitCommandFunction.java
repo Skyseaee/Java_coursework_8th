@@ -1,7 +1,9 @@
 package FileClass;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -105,18 +107,40 @@ public class GitCommandFunction {
     }
 
     /**
+     * 根据输入的key找对应的commit的key
+     * @param tempKey commit对应的hash值的前六位
+     * @return 找到的完整的hash值
+     */
+    private String findKey(String tempKey) {
+        File file = new File(newPath+"\\commit");
+        File[] files = file.listFiles();
+        for(File fi:files) {
+            if(tempKey.equals(fi.getName().substring(0,6))) {
+                return fi.getName().split(".")[0];
+            }
+        }
+        return "no";
+    }
+
+    /**
      * 回滚功能的实现（未验证）
      * @param key commit的key
+     * @return 是否回滚成功
      * @throws IOException
      */
-    public void rollBackCommand(String key) throws IOException {
-        // 找到对应的commit 重复上述操作 再修改head
-        CommitUtils.rollBack(key,newPath,currentBranch);
-        // 通过commit的key读取tree的hash
-        File file = new File(newPath+"\\commit\\"+key+".txt");
-        treeHash = GitUtils.readFirstLine(file);
-        currentBranch.updateBranch(key);
-        CommitUtils.rollBackFolder(filePath,treeHash,newPath+"\\object\\");
+    public boolean rollBackCommand(String key) throws IOException {
+        key = findKey(key);
+        if(!key.equals("no")) {
+            // 找到对应的commit 重复上述操作 再修改head
+            CommitUtils.rollBack(key,newPath,currentBranch);
+            // 通过commit的key读取tree的hash
+            File file = new File(newPath+"\\commit\\"+key+".txt");
+            treeHash = GitUtils.readFirstLine(file);
+            currentBranch.updateBranch(key);
+            CommitUtils.rollBackFolder(filePath,treeHash,newPath+"\\object\\");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -127,20 +151,20 @@ public class GitCommandFunction {
         File folder = new File(newPath+"\\Branch");
         File[] files = folder.listFiles();
         for(File fi:files) {
-            linkedList.add(fi.getName());
+            linkedList.add(fi.getName().split("\\.")[0]);
         }
         for(String s1:linkedList) {
             if(s1.equals(currentBranch.getBranchName())) {
                 System.out.print("* ");
             }
-            System.out.println(s1.split("\\.")[0]);
+            System.out.println(s1);
         }
     }
 
     /**
      * 查看commit情况(格式化输出)
      */
-    public void checkoutCommitCommand() {
+    public void logCommand() {
 
     }
 
@@ -157,4 +181,43 @@ public class GitCommandFunction {
             System.out.println("The new userName you input is as same as the old one.");
     }
 
+    /**
+     * 根据原有的文件夹内容初始化对象，一般用于文件夹的第二次初始化
+     */
+    public GitCommandFunction(String filePath) throws IOException {
+        this.filePath = filePath;
+        this.newPath = filePath + "-git";
+        this.userName = GitUtils.readFirstLine(new File(newPath+"\\config.txt"));
+        this.config = new GitConfig(userName,filePath,newPath);
+        headFile = new File(newPath+"\\head.txt");
+        String branchName = GitUtils.readFirstLine(headFile,false);
+        this.currentBranch = new Branch(new File(newPath+"\\Branch\\"+branchName+".txt"));
+        // 读取head文件中的哈希
+        lastHash = GitUtils.readFirstLine(headFile);
+        this.lastCommit = new Commit(new File(newPath+"\\commit\\"+lastHash+".txt"));
+        treeHash = lastCommit.getTreeKey();
+    }
+
+    public Branch getCurrentBranch() {return currentBranch;}
+
+    /**
+     * 删除分支
+     * @param branchName 要删除的分支
+     * @return 是否成功删除分支
+     */
+    public boolean deleteBranchCommand(String branchName) {
+        System.out.println(currentBranch.getBranchName());
+        if(!branchName.equals(currentBranch.getBranchName())) {
+            File file = new File(filePath+"-git\\Branch\\"+branchName+".txt");
+            if(file.exists()) {
+                return file.delete();
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 }

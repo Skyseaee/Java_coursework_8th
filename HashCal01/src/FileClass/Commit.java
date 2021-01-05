@@ -1,10 +1,7 @@
 package FileClass;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Date;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.io.File;
 
 public class Commit{
     private String hashCode; //当前被commit的文件夹的哈希值
@@ -48,7 +45,6 @@ public class Commit{
         }
         else {
             String lastTreeKey = getLastKey(head);
-
             if(!treeKey.equals(lastTreeKey)) {
                 this.lastKey = GitUtils.readFirstLine(head);
                 this.newPath = newPath;
@@ -58,14 +54,26 @@ public class Commit{
                 this.timeStamp = (new Date()).toString();
                 this.treeKey = treeKey;
                 setHashCode();
-                newPath = newPath + "\\commit\\" + hashCode + ".txt";
-                GitUtils.generateFolderValue(new File(newPath), this.toString());
+                String tempPath = newPath + "\\commit\\" + hashCode + ".txt";
+                GitUtils.generateFolderValue(new File(tempPath), this.toString());
                 GitUtils.writeLine(head, hashCode + " " + branchName);
             }
         }
     }
 
-    public String getLastKey(File head) {
+    public Commit(File commitFile) throws IOException {
+        BufferedReader bfr = new BufferedReader(new FileReader(commitFile));
+        treeKey = bfr.readLine().split(" ")[1];
+        lastKey = bfr.readLine().split(" ")[1];
+        author = bfr.readLine().split(" ")[1];
+        committer = bfr.readLine().split(" ")[1];
+        comment = bfr.readLine();
+        newPath = commitFile.getParent();
+        timeStamp = bfr.readLine();
+        bfr.close();
+    }
+
+    private String getLastKey(File head) {
         try {
             String lastCommitKey = GitUtils.readFirstLine(head);
             File lastCommitFile = GitUtils.findFile(lastCommitKey, head.getParent()+"\\commit");
@@ -98,6 +106,8 @@ public class Commit{
             e.printStackTrace();
         }
     }
+
+    public String getTreeKey() {return treeKey;}
 
     public String toString() {
         return "Tree " + treeKey + '\n' + "parent " + lastKey + '\n' + "author " + author + '\n' +"committer " + committer + '\n' + comment + '\n' + timeStamp;
