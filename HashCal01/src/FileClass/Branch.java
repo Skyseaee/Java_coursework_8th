@@ -41,7 +41,7 @@ public class Branch{
      * @throws FileNotFoundException 未找到该分支对应的文件
      */
     public Branch(File branchFile) throws FileNotFoundException {
-        branchName = branchFile.getName();
+        branchName = branchFile.getName().split(".")[0];
         commitHash = GitUtils.readFirstLine(branchFile);
         branchPath = branchFile.getAbsolutePath();
     }

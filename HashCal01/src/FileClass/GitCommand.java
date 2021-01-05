@@ -180,7 +180,7 @@ public class GitCommand {
                 }
             }
             else if(commandList[1].equals("log")) {
-                if(commandList.length==3) {
+                if(commandList.length==2) {
                     if(gitCommand!=null)
                         gitCommand.logCommand();
                     else

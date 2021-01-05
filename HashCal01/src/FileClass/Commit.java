@@ -11,6 +11,7 @@ public class Commit{
     private String timeStamp;
     private String lastKey;
     private String treeKey;
+    private String branch;
     private String newPath;
     private final String type = "Commit";
 
@@ -38,6 +39,7 @@ public class Commit{
             if(!tempFile.exists()) {
                 tempFile.mkdir();
             }
+            branch = branchName;
             String newPath01 = newPath + "\\commit\\" + hashCode + ".txt";
             GitUtils.generateFolderValue(new File(newPath01), this.toString());
             String newPath02 = newPath + "\\" + "head.txt";
@@ -52,6 +54,7 @@ public class Commit{
                 this.author = author;
                 this.committer = committer;
                 this.comment = comment;
+                branch = branchName;
                 this.timeStamp = (new Date()).toString();
                 this.treeKey = treeKey;
                 setHashCode();
@@ -116,7 +119,7 @@ public class Commit{
     public String getTreeKey() {return treeKey;}
 
     public String toString() {
-        return "Tree " + treeKey + '\n' + "parent " + lastKey + '\n' + "author " + author + '\n' +"committer " + committer + '\n' + comment + '\n' + timeStamp;
+        return "Tree " + treeKey + '\n' + "parent " + lastKey + '\n' + "author " + author + '\n' +"committer " + committer + '\n' + comment + '\n' + timeStamp + '\n' + "branch " + branch;
     }
 
 }

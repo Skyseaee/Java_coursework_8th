@@ -12,7 +12,6 @@ public class FinalTest {
             System.out.print("Enter command here,sweetie. ->> ");
             String command = input.nextLine();
             git.switchCommand(command);
-            input.close();
         }
     }
 }

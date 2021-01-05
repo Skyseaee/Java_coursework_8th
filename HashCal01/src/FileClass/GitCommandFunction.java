@@ -114,7 +114,7 @@ public class GitCommandFunction {
         File[] files = file.listFiles();
         for(File fi:files) {
             if(tempKey.equals(fi.getName().substring(0,6))) {
-                return fi.getName().split(".")[0];
+                return fi.getName().split("\\.")[0];
             }
         }
         return "no";
@@ -133,7 +133,7 @@ public class GitCommandFunction {
             CommitUtils.rollBack(key,newPath,currentBranch);
             // 通过commit的key读取tree的hash
             File file = new File(newPath+"\\commit\\"+key+".txt");
-            treeHash = GitUtils.readFirstLine(file);
+            treeHash = GitUtils.readFirstLine(file,false);
             currentBranch.updateBranch(key);
             CommitUtils.rollBackFolder(filePath,treeHash,newPath+"\\object\\");
             return true;
@@ -174,9 +174,9 @@ public class GitCommandFunction {
         String author = ans[1];
         String comment = ans[2];
         String timestramp = ans[3];
-        String branch = ans[4];
+        String branch = ans[4].split("\\.")[0];
         logPrint(lastHash, author, comment,timestramp,branch);
-        while(nextHash != null){
+        while(!nextHash.equals("null")){
             lastHash = nextHash;
             tempFile = new File(newPath+"\\commit\\"+lastHash+".txt");
             ans = GitUtils.readCommit(tempFile);
@@ -184,7 +184,7 @@ public class GitCommandFunction {
             author = ans[1];
             comment = ans[2];
             timestramp = ans[3];
-            branch = ans[4];
+            branch = ans[4].split("\\.")[0];
             logPrint(lastHash, author, comment,timestramp,branch);
         }
     }
@@ -226,7 +226,6 @@ public class GitCommandFunction {
      * @return 是否成功删除分支
      */
     public boolean deleteBranchCommand(String branchName) {
-        System.out.println(currentBranch.getBranchName());
         if(!branchName.equals(currentBranch.getBranchName())) {
             File file = new File(filePath+"-git\\Branch\\"+branchName+".txt");
             if(file.exists()) {
