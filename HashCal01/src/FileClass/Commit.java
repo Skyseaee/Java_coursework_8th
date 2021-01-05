@@ -50,6 +50,7 @@ public class Commit{
             String lastTreeKey = getLastKey(head);
 
             if(!treeKey.equals(lastTreeKey)) {
+                //从head文件中读取上次commit的key
                 this.lastKey = GitUtils.readFirstLine(head);
                 this.newPath = newPath;
                 this.author = author;
@@ -64,12 +65,15 @@ public class Commit{
             }
         }
     }
-
+    //获取lastTreekey
     public String getLastKey(File head) {
         try {
+            //从head文件总找到上次commit的key
             String lastCommitKey = GitUtils.readFirstLine(head);
+            //根据lastcommit的key找到对应的commit文件
             File lastCommitFile = GitUtils.findFile(lastCommitKey, head.getParent()+"\\commit");
             try{
+                //从commit文件中读取tree的key
                 String res = (GitUtils.readFirstLine(lastCommitFile,false));
                 return res;
             }
@@ -90,7 +94,8 @@ public class Commit{
     public String getHashCode() {
         return hashCode;
     }
-
+ 
+    //根据commmit所有的value计算commit对象的哈希值
     public void setHashCode() {
         try {
             this.hashCode = GitUtils.HashCompute(new ByteArrayInputStream(toString().getBytes()));
