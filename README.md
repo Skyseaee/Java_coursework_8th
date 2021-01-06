@@ -23,14 +23,14 @@ The coursework of Java class.
 **实现思路：**
 
   - key-value存储（blob tree）
-  - blob：
-    - key：文件内容的哈希值
-    - value：文件内容（不包含文件名）
-  - tree：
-    - key：value的哈希值
-    - value：每个子文件blob的key；每个子文件夹tree的key；子文件夹名称和子文件名称
-  - 存储方式
-    - key作为文件名 文件内容为value
+    - blob：
+      - key：文件内容的哈希值
+      - value：文件内容（不包含文件名）
+    - tree：
+      - key：value的哈希值
+      - value：每个子文件blob的key；每个子文件夹tree的key；子文件夹名称和子文件名称
+    - 存储方式
+      - key作为文件名 文件内容为value
 - 将文件夹转化为key-value存储
   - 给定一个文件夹目录，将其转化成若干tree和blob
   - 深度优先遍历此目录
