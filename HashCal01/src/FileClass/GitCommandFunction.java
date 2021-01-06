@@ -2,7 +2,10 @@ package FileClass;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * 整个Git的命令对应的函数放在此类中
@@ -121,7 +124,7 @@ public class GitCommandFunction {
     }
 
     /**
-     * 回滚功能的实现（未验证）
+     * 回滚功能的实现
      * @param key commit的key
      * @return 是否回滚成功
      * @throws IOException
@@ -238,5 +241,84 @@ public class GitCommandFunction {
 
     public String getUserName() {
         return userName;
+    }
+    /**
+     * diff功能的递归输出函数
+     */
+    public static void printDiff(int[][] path,List<String> A,List<String> B,int x,int y){
+        if(x == 0 && y == 0){
+            return;
+        }
+        if(x == 0){
+            printDiff(path, A, B, 0, y-1);
+            System.out.printf("+%s\n",B.get(y-1));
+            return;
+        }
+        if(y == 0){
+            printDiff(path, A, B, x-1, 0);
+            System.out.printf("-%s\n",A.get(x-1));
+            return;
+        }
+        if(path[x][y] == -1){
+            printDiff(path, A, B, x, y-1);
+            System.out.printf("+%s\n",B.get(y-1));
+        }
+        else if(path[x][y] == 1){
+            printDiff(path, A, B, x-1, y);
+            System.out.printf("-%s\n",A.get(x-1));
+        }
+        else{
+            printDiff(path, A, B, x-1, y-1);
+            System.out.printf("%s\n",A.get(x-1));
+        }
+    }
+    /**
+     * diff功能的实现
+     * @param filenameA 文件A 
+     * @param filenameB 文件B
+     * @throws Exception
+     */
+    public void diff(String filenameA,String filenameB) throws Exception {
+        Scanner input = new Scanner(new File(filenameA));
+        List<String> A = new ArrayList<>();
+        List<String> B = new ArrayList<>();
+        while(input.hasNextLine()){
+            A.add(input.nextLine());
+        }
+        input = new Scanner(new File(filenameB));
+        while(input.hasNextLine()){
+            B.add(input.nextLine());
+        }
+        int m = A.size(),n = B.size();
+        int[] dp = new int[n+1]; //滚动数组
+        int[][] path = new int[m+1][n+1];
+        for(int i = 0;i <= m;i++){
+            path[i][0] = -1;
+        }
+        for(int i = 0;i <= n;i++){
+            dp[i] = i;
+            path[0][i] = 1;
+        }
+        for(int i = 1;i <= m;i++){
+            int tmp = i - 1; //dp[i-1][j-1]
+            dp[0] = i;
+            for(int j = 1;j <= n;j++){
+                int ntmp = dp[j];
+                if(dp[j] < dp[j-1]){
+                    dp[j] = dp[j] + 1;
+                    path[i][j] = 1;
+                }
+                else{
+                    dp[j] = dp[j-1] + 1;
+                    path[i][j] = -1;
+                }
+                if(A.get(i-1).equals(B.get(j-1)) &&  tmp <= dp[j]){
+                    dp[j] = tmp;
+                    path[i][j] = 0;
+                }
+                tmp = ntmp;
+            }
+        }
+        printDiff(path, A, B, m, n);
     }
 }
