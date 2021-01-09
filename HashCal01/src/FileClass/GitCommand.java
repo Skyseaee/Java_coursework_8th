@@ -75,7 +75,7 @@ public class GitCommand {
             }
             else if(commandList[1].equals("config")) {
                 if(userName.length()>=1 && commandList.length==2) {
-                    normalPrint(userName);
+                    normalPrint("userName: "+userName);
                 }
                 else if(commandList.length == 3) {
                     if(!new File(filePath+"-git\\config.txt").exists()) {
@@ -118,7 +118,7 @@ public class GitCommand {
                             }
                         }
                         else {
-                            gitCommand.deleteBranchCommand(commandList[3]);
+                            errPrint("No specific branch is specified");
                         }
                     }
                     else
@@ -209,6 +209,7 @@ public class GitCommand {
             }
             else if(commandList[1].equals("exit")) {
                 if(commandList.length==2) {
+                    normalPrint("Looking forward to the next meeting.");
                     System.exit(0);
                 }
                 else {
@@ -231,6 +232,6 @@ public class GitCommand {
 
     public static void errPrint(String message) {
         System.err.println(message);
-        System.out.println("---------------------------------------------------------------------");
+        System.err.println("---------------------------------------------------------------------");
     }
 }
