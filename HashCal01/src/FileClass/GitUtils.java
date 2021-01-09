@@ -43,14 +43,14 @@ public class GitUtils {
      */
     public static void generateFileValue(String filepath, String newFilePath){
         // 创建文件
-        File srcfile = new File(filepath);
+        File srcFile = new File(filepath);
 
         File newFile = new File(newFilePath);
         // 创建流节点流
         BufferedInputStream bufferedInputStream = null;
         BufferedOutputStream bufferedOutputStream = null;
         try {
-            bufferedInputStream = new BufferedInputStream(new FileInputStream(srcfile));
+            bufferedInputStream = new BufferedInputStream(new FileInputStream(srcFile));
             bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(newFile));
             byte[] buffer = new byte[1024];
             int len = -1;
@@ -230,7 +230,6 @@ public class GitUtils {
      */
     public static String readFirstLine(File file) throws FileNotFoundException {
         if(!file.exists()){
-            System.out.println("the file is not exist, can't read the first line.");
             return null;
         }
         else{
@@ -250,7 +249,6 @@ public class GitUtils {
      */
     public static String readFirstLine(File file,boolean index) throws FileNotFoundException {
         if(!file.exists()){
-            System.out.println("the file is not exist, can't read the first line.");
             return null;
         }
         else{
@@ -268,7 +266,6 @@ public class GitUtils {
      */
     public static String readNthLine(File file,int n) throws FileNotFoundException {
         if(!file.exists()){
-            System.out.println("the file is not exist, can't read the first line.");
             return null;
         }
         else{
@@ -290,7 +287,6 @@ public class GitUtils {
      */
     public static String readNthLine(File file,int n,boolean index) throws FileNotFoundException {
         if(!file.exists()){
-            System.out.println("the file is not exist, can't read the first line.");
             return null;
         }
         else{
@@ -312,7 +308,6 @@ public class GitUtils {
      */
     public static String readLastLine(File file,boolean index) throws FileNotFoundException {
         if(!file.exists()){
-            System.out.println("the file is not exist, can't read the last line.");
             return null;
         }
         else{
@@ -339,24 +334,6 @@ public class GitUtils {
         FileOutputStream fileOutputStream = new FileOutputStream(file, false);
         fileOutputStream.write(content.getBytes());
         fileOutputStream.close();
-//        File tmp = File.createTempFile("tmp", null);
-//        RandomAccessFile raf = new RandomAccessFile(file, "rw");
-//        FileOutputStream tmpOut = new FileOutputStream(tmp);
-//        FileInputStream tmpIn = new FileInputStream(tmp);
-//        raf.seek(0);
-//        byte[] buf = new byte[64];
-//        int hasRead = 0;
-//        while((hasRead = raf.read(buf)) > 0){
-//            tmpOut.write(buf,0,hasRead);
-//        }
-//        raf.seek(0);
-//        raf.write(content.getBytes());
-//        while((hasRead = tmpIn.read(buf)) > 0){
-//            raf.write(buf,0,hasRead);
-//        }
-//        raf.close();
-//        tmpIn.close();
-//        tmpOut.close();
     }
 
 }

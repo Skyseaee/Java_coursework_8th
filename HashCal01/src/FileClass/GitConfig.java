@@ -46,6 +46,6 @@ public class GitConfig {
     public void setUserName(String userName) throws IOException {
         this.userName = userName;
         // 修改配置文件
-        GitUtils.writeLine(new File(configPath),userName + " " + filePath);
+        GitUtils.writeLine(new File(configPath+"\\config.txt"),userName + " " + filePath);
     }
 }

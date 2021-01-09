@@ -18,7 +18,7 @@ public class HashGenerateTest{
 
     @Before
     public void init()  throws IOException, NoSuchAlgorithmException {
-//        DFSFolder dfs = new DFSFolder(filePath, newPath);
+        DFSFolder dfs = new DFSFolder(filePath, newPath);
     }
 
     @Test
@@ -66,12 +66,6 @@ public class HashGenerateTest{
         }
         Assert.assertTrue(res);
         br.close();
-    }
-
-    @Test
-    public void testString() {
-        String test = "";
-        System.out.println(test.length());
     }
 
     @After

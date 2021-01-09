@@ -3,6 +3,9 @@ package FileClass;
 import java.io.File;
 import java.io.FileInputStream;
 
+/**
+ * 将文件进行哈希存储的类
+ */
 public class FiletoBlob{
     private File file;
     private String hashCode;

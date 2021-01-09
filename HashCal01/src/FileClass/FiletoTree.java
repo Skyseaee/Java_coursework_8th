@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+/**
+ * 将文件夹转变为tree的类
+ */
 public class FiletoTree{
     private File file;
     private String hashCode;
     private String folderName;
-    private List<File> childFile;
     private String folderContent;
 
     public FiletoTree(File file,String newPath) throws IOException, NoSuchAlgorithmException {
@@ -50,14 +52,6 @@ public class FiletoTree{
 
     public String getFolderName() {
         return folderName;
-    }
-
-    public List<File> getChildFile() {
-        return childFile;
-    }
-
-    public void setChildFile(File childFile) {
-        this.childFile.add(childFile);
     }
 
     public String getFolderContent() {

@@ -3,6 +3,9 @@ import java.io.*;
 import java.util.Date;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Commit的类，提交commit时初始化使用，包括创建commit文件等
+ */
 public class Commit{
     private String hashCode; //当前被commit的文件夹的哈希值
     private String author;
